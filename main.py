@@ -12,9 +12,7 @@ def read_csv(file_name):
 
         factors_dict = dict()
         factors_dict["req_nav_back"] = int(reader_dict["Необходимость наведения в зад. полусферу"])
-        factors_dict["req_nav_front"] = int(reader_dict["Необходимость наведения в пер. полусферу"])
         factors_dict["pref_nav_back"] = int(reader_dict["Предпочтительно наведение в зад. полусферу"])
-        factors_dict["pref_nav_front"] = int(reader_dict["Предпочтительно наведение в пер. полусферу"])
         factors_dict["nav_min"] = int(reader_dict["Требование наведения за мин. время"])
         factors_dict["stealth"] = int(reader_dict["Требование к скрытности"])
         factors_dict["nav_type"] = reader_dict["Тип наведения"].upper()
@@ -53,73 +51,50 @@ def process(factors_dict):
         return "невозможно"
 
     # правило 3
-    if (factors_dict["req_nav_back"] == 1 or factors_dict["pref_nav_back"] == 1) \
-            and \
-            (factors_dict["req_nav_front"] == 1 or factors_dict["pref_nav_front"] == 1):
-        methods_dict["невозможно"] = True
-        print("ERROR: невозможно выбрать метод наведения "
-              "конфликт между выбором наведения в определенную полусферу")
-        return "невозможно"
-
-    # правило 4
-    if factors_dict["nav_type"] == "ТЕП" or factors_dict["stealth"] == 1:
+    if (factors_dict["nav_type"] == "ТЕП" or factors_dict["stealth"] == 1)\
+            and (factors_dict["half_sphere"] == "ПЕР"):
         methods_dict["перехват"] = False
 
-    # правило 5
-    if factors_dict["req_nav_front"] == 1:
-        methods_dict["манёвр"] = False
-        methods_dict["прямой"] = False
-
-    # правило 6
-    if factors_dict["half_sphere"] == "ПЕР":
-        methods_dict["манёвр"] = False
-        methods_dict["прямой"] = False
-
-    # правило 7
+    # правило 4
     if factors_dict["vel_pryam"] == 0 or \
             factors_dict["tr_pryam"] == 0 or \
             factors_dict["top_pryam"] == 0:
         methods_dict["прямой"] = False
 
-    # правило 8
+    # правило 5
     if factors_dict["vel_pereh"] == 0 or \
             factors_dict["tr_pereh"] == 0 or \
             factors_dict["top_pereh"] == 0:
         methods_dict["перехват"] = False
 
-    # правило 9
+    # правило 6
     if factors_dict["vel_man"] == 0 or \
             factors_dict["tr_man"] == 0 or \
             factors_dict["top_man"] == 0:
         methods_dict["манёвр"] = False
 
-    # правило 10
+    # правило 7
     if factors_dict["pref_nav_back"] == 1 and \
             (methods_dict["манёвр"] or methods_dict["прямой"]):
         methods_dict["перехват"] = False
 
-    # правило 11
-    if factors_dict["pref_nav_front"] == 1 and methods_dict["перехват"]:
-        methods_dict["манёвр"] = False
-        methods_dict["прямой"] = False
-
-    # правило 12
+    # правило 8
     if not methods_dict["манёвр"] and not methods_dict["прямой"] and not methods_dict["перехват"]:
         methods_dict["невозможно"] = True
         print("ERROR: ни один из методов наведения не реализуем")
         return "невозможно"
 
-    # правило 13
+    # правило 9
     if methods_dict["перехват"]:
         methods_dict["перехват"] = True
         return "перехват"
 
-    # правило 14
+    # правило 10
     if methods_dict["прямой"]:
         methods_dict["прямой"] = True
         return "прямой"
 
-    # правило 15
+    # правило 11
     if methods_dict["манёвр"]:
         methods_dict["манёвр"] = True
         return "манёвр"
