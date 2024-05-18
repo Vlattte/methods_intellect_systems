@@ -42,40 +42,37 @@ def process(factors_dict):
         return "невозможно"
 
     # правило 2
-    if factors_dict["nav_type"] == "ТЕП" and \
-            (factors_dict["req_nav_back"] == 1 or
-             factors_dict["pref_nav_back"] == 1):
-        methods_dict["невозможно"] = True
-        print("ERROR: невозможно выбрать метод наведения "
-              "(тип наведения: ТЕП, необходимо или предпочтительно наведение в заднюю полусферу: 1)")
-        return "невозможно"
-
-    # правило 3
     if (factors_dict["nav_type"] == "ТЕП" or factors_dict["stealth"] == 1)\
             and (factors_dict["half_sphere"] == "ПЕР"):
         methods_dict["перехват"] = False
 
-    # правило 4
+    # правило 3
     if factors_dict["vel_pryam"] == 0 or \
             factors_dict["tr_pryam"] == 0 or \
             factors_dict["top_pryam"] == 0:
         methods_dict["прямой"] = False
 
-    # правило 5
+    # правило 4
     if factors_dict["vel_pereh"] == 0 or \
             factors_dict["tr_pereh"] == 0 or \
             factors_dict["top_pereh"] == 0:
         methods_dict["перехват"] = False
 
-    # правило 6
+    # правило 5
     if factors_dict["vel_man"] == 0 or \
             factors_dict["tr_man"] == 0 or \
             factors_dict["top_man"] == 0:
         methods_dict["манёвр"] = False
 
-    # правило 7
+    # правило 6
     if factors_dict["pref_nav_back"] == 1 and \
+            (factors_dict["half_sphere"] == "ПЕР") and \
             (methods_dict["манёвр"] or methods_dict["прямой"]):
+        methods_dict["перехват"] = False
+
+    # правило 7
+    if factors_dict["req_nav_back"] == 1 and \
+            (factors_dict["half_sphere"] == "ПЕР"):
         methods_dict["перехват"] = False
 
     # правило 8
@@ -110,7 +107,7 @@ if __name__ == "__main__":
     if method_name == "невозможно":
         print("Входные данные содержат ошибку и нельзя выбрать ни один из методов наведения")
     elif method_name == "перехват":
-        print("Исходя из переданного ситуационного вектора был выбран метод парехвата")
+        print("Исходя из переданного ситуационного вектора был выбран метод перехвата")
     elif method_name == "прямой":
         print("Исходя из переданного ситуационного вектора был выбран прямой метод наведения")
     elif method_name == "манёвр":
