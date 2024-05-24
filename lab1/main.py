@@ -64,12 +64,6 @@ def process(factors_dict):
             factors_dict["top_man"] == 0:
         methods_dict["манёвр"] = False
 
-    # правило 6
-    if factors_dict["pref_nav_back"] == 1 and \
-            (factors_dict["half_sphere"] == "ПЕР") and \
-            (methods_dict["манёвр"] or methods_dict["прямой"]):
-        methods_dict["перехват"] = False
-
     # правило 7
     if factors_dict["req_nav_back"] == 1 and \
             (factors_dict["half_sphere"] == "ПЕР"):
