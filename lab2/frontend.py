@@ -118,7 +118,7 @@ def start(_fly_time, _velocity, _defuzzy, _fuzzy):
         x = curvesBasicPoints[0][i]
         y = curvesBasicPoints[1][i]
         if i % 3 == 0:
-            canvas.create_oval(x - 2.0, y + 2.0, x + 2.0, y - 2.0, outline="BLACK", fill="BLACK")
+            canvas.create_oval(x - 2.0, y + 2.0, x + 2.0, y - 2.0, outline="GREEN", fill="GREEN")
 
     settings = data['UsualMissile']
     curvesUsual = np.hstack(tuple(map(requestPointToNPPoint, settings['Trajectory'])))
@@ -127,7 +127,7 @@ def start(_fly_time, _velocity, _defuzzy, _fuzzy):
         x = curvesUsual[0][i]
         y = curvesUsual[1][i]
         if i % 3 == 0:
-            canvas.create_oval(x - 2.0, y + 2.0, x + 2.0, y - 2.0, outline="BLUE", fill="BLUE")
+            canvas.create_oval(x - 2.0, y + 2.0, x + 2.0, y - 2.0, outline="BLACK", fill="CYAN")
     UsualHit = settings['IsHit']
 
     settings = data['FuzzyMissile']
@@ -137,7 +137,7 @@ def start(_fly_time, _velocity, _defuzzy, _fuzzy):
         x = curvesFuzzy[0][i]
         y = curvesFuzzy[1][i]
         if i % 3 == 0:
-            canvas.create_oval(x - 2.0, y + 2.0, x + 2.0, y - 2.0, outline="RED", fill="RED")
+            canvas.create_oval(x - 2.0, y + 2.0, x + 2.0, y - 2.0, outline="BLUE", fill="BLUE")
     FuzzyHit = settings['IsHit']
 
     print("Usual missile hit?", UsualHit)
@@ -153,9 +153,9 @@ def start(_fly_time, _velocity, _defuzzy, _fuzzy):
     else:
         second_hit.config(bg='red')
 
-    oval1 = canvas.create_oval(0, 0, 0, 0, fill="YELLOW")
-    oval2 = canvas.create_oval(0, 0, 0, 0, fill="PINK")
-    oval3 = canvas.create_oval(0, 0, 0, 0, fill="ORANGE")
+    oval1 = canvas.create_oval(0, 0, 0, 0, fill="GREEN")
+    oval2 = canvas.create_oval(0, 0, 0, 0, fill="CYAN")
+    oval3 = canvas.create_oval(0, 0, 0, 0, fill="BLUE")
     # oval4 = canvas.create_oval(0, 0, 0, 0, outline= "GREEN", width=5)
 
     FuzzyFlag = False
@@ -183,11 +183,11 @@ def start(_fly_time, _velocity, _defuzzy, _fuzzy):
         if not FuzzyFlag:
             FuzzyFlag = i == FuzzyP[1]
             if FuzzyFlag:
-                canvas.create_oval(x3 - 25.0, y3 + 25.0, x3 + 25.0, y3 - 25.0, outline="ORANGE", width=5)
+                canvas.create_oval(x3 - 25.0, y3 + 25.0, x3 + 25.0, y3 - 25.0, outline="RED", width=5)
         if not UsualFlag:
             UsualFlag = i == UsualP[1]
             if UsualFlag:
-                canvas.create_oval(x2 - 25.0, y2 + 25.0, x2 + 25.0, y2 - 25.0, outline="ORANGE", width=5)
+                canvas.create_oval(x2 - 25.0, y2 + 25.0, x2 + 25.0, y2 - 25.0, outline="BLUE", width=5)
 
         if FuzzyFlag and UsualFlag:
             break
@@ -248,7 +248,7 @@ def zoom_c(event):
 
 if __name__ == "__main__":
     window = Tk()
-    window.title("Имитатор наведения")
+    window.title("Лабораторная 2 Смирнов")
     sw = 1600  # window.winfo_screenwidth()
     sh = 900  # window.winfo_screenheight()
     window.geometry('%dx%d' % (sw - 300, sh - 300))
@@ -300,12 +300,12 @@ if __name__ == "__main__":
     # нечеткая модификация пропорционального метода наведения
     first_hit_label = Label(statusbar, text="Попадание ПМН")
     first_hit_label.grid(column=0, row=6, padx=5, pady=5)
-    first_hit = Entry(statusbar, width=5, bg='red', state="readonly")
+    first_hit = Entry(statusbar, width=5, bg='red')
     first_hit.grid(column=1, row=6, padx=5, pady=5)
 
-    second_hit_label = Label(statusbar, text="Попадание НМН")
+    second_hit_label = Label(statusbar, text="Попадание НМПМН")
     second_hit_label.grid(column=0, row=7, padx=5, pady=5)
-    second_hit = Entry(statusbar, width=5, bg='red', state="readonly")
+    second_hit = Entry(statusbar, width=5, bg='red')
     second_hit.grid(column=1, row=7, padx=5, pady=5)
 
     statusbar.pack(side=BOTTOM, fill=X)
