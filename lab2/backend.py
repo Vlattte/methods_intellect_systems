@@ -1,16 +1,10 @@
-"""Imitation calculation module.
-
-Usage:
-python3 trajectorygenerator.py requestFileName responseFileName
-"""
-
 import json
 
 import numpy as np
 from bezier import Curve
 from numpy import linalg
 
-import controllers
+import algorithms
 import missile
 
 
@@ -46,10 +40,10 @@ class TrajectoryGenerator:
         usual.launchPoint = requestPointToNPPoint(settings['LaunchPoint'])
         direction = requestPointToNPPoint(settings['Direction']) - usual.launchPoint
         usual.startVelocity = unitVector(direction) * settings['VelocityModule']
-        usual.controller = controllers.Proportional(settings['PropCoeff'])
+        usual.controller = algorithms.Proportional(settings['PropCoeff'])
 
         fuzzy = usual.copy()
-        fuzzy.controller = controllers.Fuzzy(settings['Inference'],
+        fuzzy.controller = algorithms.Fuzzy(settings['Inference'],
                                              settings['Defuzzification'])
         # Генерация траектории ракеты с пропорциональным методом наведением
         ut = usual.trajectory(self._aircraftTrajectory)

@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 
 import numpy as np
 
-import trajectorygenerator
+import backend
 
 prev_x = None
 prev_y = None
@@ -33,12 +33,12 @@ class PopupWindow(object):
         self.top.title("Введите параметры запуска")
         self.top.grid()
 
-        self.fly_time_label = Label(self.top, text="Введите время полета")
+        self.fly_time_label = Label(self.top, text="Введите скорость ракеты")
         self.fly_time_label.grid(row=0, column=0, sticky=W, padx=10)
         self.fly_time = Entry(self.top)
         self.fly_time.grid(row=1, column=0, sticky=W, padx=10)
 
-        self.velo_label = Label(self.top, text="Введите скорость ракеты")
+        self.velo_label = Label(self.top, text="Введите время полета")
         self.velo_label.grid(row=0, column=2, sticky=W)
         self.velo = Entry(self.top)
         self.velo.grid(row=1, column=2, sticky=W, padx=10)
@@ -46,14 +46,14 @@ class PopupWindow(object):
         self.b = Button(self.top, text='Start', command=self._start_sim)
         self.b.grid(row=2, column=1, sticky=W, pady=15)
 
-        fuzzy_methods_label = Label(self.top, text="Fuzzy")
+        fuzzy_methods_label = Label(self.top, text="Методы нечеткой логики")
         fuzzy_methods_label.grid(column=3, row=0, padx=5, pady=5)
         self.fuzzy_methods = Combobox(self.top, values=["Метод правого максимума", "Метод центра тяжести"],
                                  width=30, state="readonly")
         self.fuzzy_methods.grid(column=3, row=1, padx=5, pady=5)
         self.fuzzy_methods.current(1)
 
-        defuzzy_logic_methods_label = Label(self.top, text="Defuzzy")
+        defuzzy_logic_methods_label = Label(self.top, text="Пропорциональные методы")
         defuzzy_logic_methods_label.grid(column=4, row=0, padx=5, pady=5)
         self.defuzzy_logic_methods = Combobox(self.top, values=["Метод максимума-минимума", "Метод максимума-произведения"],
                                          width=30, state="readonly")
@@ -109,7 +109,7 @@ def start(_fly_time, _velocity, _defuzzy, _fuzzy):
 
     ImitationRequest = json.dumps(AircraftPoints, ensure_ascii=False)
 
-    tr = trajectorygenerator.TrajectoryGenerator(ImitationRequest)
+    tr = backend.TrajectoryGenerator(ImitationRequest)
     ImitationResponse = tr.response_s
     data = json.loads(ImitationResponse)
 
@@ -235,17 +235,6 @@ def clear_com():
 scale = 1
 
 
-def zoom_c(event):
-    global scale
-    x = canvas.canvasx(event.x)
-    y = canvas.canvasy(event.y)
-
-    if event.num == 5 or event.delta == -120:
-        canvas.scale('all', x, y, 0.9, 0.9)
-    if event.num == 4 or event.delta == 120:
-        canvas.scale('all', x, y, 1.1, 1.1)
-
-
 if __name__ == "__main__":
     window = Tk()
     window.title("Лабораторная 2 Смирнов")
@@ -314,10 +303,6 @@ if __name__ == "__main__":
     canvas = Canvas(window, relief=RAISED, borderwidth=1, bg='WHITE')
     canvas.pack(side=RIGHT, padx=5)
     canvas.pack(fill=BOTH, expand=1)
-
-    canvas.bind("<MouseWheel>", zoom_c)
-    canvas.bind('<ButtonPress-3>', lambda event: canvas.scan_mark(event.x, event.y))
-    canvas.bind("<B3-Motion>", lambda event: canvas.scan_dragto(event.x, event.y, gain=1))
 
     st = Label(canvas, bg='WHITE')
     st.pack(side=TOP, expand=1)

@@ -30,6 +30,7 @@ class Missile:
         self._velocity = self.startVelocity
         self._points = np.hstack((self.launchPoint, self.launchPoint + self._velocity))
 
+        print("TABLE")
         return self._calcPoints(aircraftPoints)
 
     def _calcPoints(self, aircraftPoints):
@@ -50,8 +51,8 @@ class Missile:
         self._approachVelocity = abs(np.linalg.norm(nextSightLine) - self._currentDistance)
 
         rotationAngle = self.controller.rotationAngle(self)
-        print(rotationAngle, ";", self._approachVelocity,";",  self._sightAngleDelta,
-              ";", rotationAngle / (self._sightAngleDelta * self._approachVelocity), ";")
+        print(round(self._sightAngleDelta, 4), ";", round(self._approachVelocity, 4), ";", round(rotationAngle, 4),
+              ";", round(rotationAngle / (self._sightAngleDelta * self._approachVelocity), 4), ";")
         self._velocity = rotate(self._velocity, rotationAngle)
 
         nextPoint = np.reshape(self._points[:, -1], (2, 1)) + self._velocity
